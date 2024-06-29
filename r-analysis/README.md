@@ -1,7 +1,7 @@
 # Dota 2 Performance Analysis - R
 
 ## Description
-This section contains the R scripts and results for the Dota 2 performance analysis. The R analysis focuses on data cleaning, exploratory data analysis, and visualization.
+This section contains the R Markdown files and results for the Dota 2 performance analysis. The R analysis focuses on data cleaning, exploratory data analysis, and visualization.
 
 ## Files
 - `scripts/`: Contains R scripts for data cleaning and analysis.
