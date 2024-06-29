@@ -1,7 +1,7 @@
 # Dota 2 Performance Analysis - Python
 
 ## Description
-This section contains the Python scripts and results for the Dota 2 performance analysis. The Python analysis includes advanced statistical analysis, modeling, and visualization.
+This section contains the Jupyter Notebooks and results for the Dota 2 performance analysis. The Python analysis includes advanced statistical analysis, modeling, and visualization.
 
 ## Files
 - `scripts/`: Contains Python scripts for data cleaning and analysis.
