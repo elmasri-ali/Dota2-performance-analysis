@@ -5,8 +5,7 @@ This section contains the Python scripts and results for the Dota 2 performance 
 
 ## Files
 - `scripts/`: Contains Python scripts for data cleaning and analysis.
-  - `data_cleaning.py`: Script for cleaning and preprocessing the data.
-  - `analysis.py`: Script for performing the data analysis.
+  - `data_cleaning.py`: Contains R scripts for data cleaning and analysis.
   - `thinkplot.py`: Visualization functions from thinkstats.
   - `thinkstats2.py`: Statistical functions from thinkstats.
 - `results/`: Contains the output of the analysis, including figures and tables.
