@@ -1,7 +1,7 @@
 ---
-title: "Dota2 Project, Final"
-author: "Ali El Masri"
-date: "2023-10-17"
+title: 
+author: 
+date: 
 output:
   pdf_document: default
   word_document: default
@@ -65,7 +65,7 @@ My initial focus will be on variable selection, aiming to isolate those most per
 
 ## Model/Method Recommendation:  
 
-I am considering backward stepwise regression to identify variables with the strongest correlation to winning conditions, ensuring all necessary assumptions for this model are met.
+The primary model utilized in this analysis is logistic regression, chosen for its effectiveness in binary classification problems, such as predicting match outcomes (win or loss). Logistic regression is well-suited for this task due to its ability to handle multiple predictor variables and provide probabilities for the outcomes. By fitting a logistic regression model, I aim to identify significant predictors of winning a match, which include in-game metrics such as kills, deaths, assists, net worth, and various others.
 
 ## Required Packages:
 
@@ -130,10 +130,13 @@ library(ggplot2)
 **I will start by exploring the variables, unnesting nested data frames when needed, merging data sets, dropping, and creating new columns. I intend to create a new data frame with limited variables I would like to work with. There is always a possibility of adding new and deleting existing variables during the analysis. **
 
 ```{r}
-#Reading three different data sets. 
-Player_data <- fromJSON("matche_since_2019.json")
-matches_data <- fromJSON("parsed_matche_since_2019.json")
-Heroes <- fromJSON("Heroes.json")
+# Define the relative paths to the data files
+data_dir <- "../data"
+
+# Load the JSON files
+Player_data <- fromJSON(file.path(data_dir, "matche_since_2019.json"))
+matches_data <- fromJSON(file.path(data_dir, "parsed_matche_since_2019.json"))
+Heroes <- fromJSON(file.path(data_dir, "Heroes.json"))
 
 ```
 
@@ -145,7 +148,7 @@ Heroes <- Heroes %>%
 kable(head(Heroes))
 ```
 
-**For large output data frame tables, I will only print the dimension of the table to avoid knitting unnecessary extensive information.** 
+**Exploring the dimensions** 
 
 ```{r}
 #Checking Rows and variables in this data set.
@@ -209,7 +212,7 @@ dim(new_data_frame)
 ```
 
 
-**Thus far, I still need to clean the NA value, as I am still trying to figure out how I want to handle it for modeling, so I will leave it for now. The cleaning process involved several steps:**  
+**Thus far the cleaning process involved several steps:**  
 
 Filtering Data: As shown in R code, filtered out the matches where my account is involved using filter(account_id == my_ID).
 Data Type Conversions: Ensure all variables are of the correct data type.
@@ -217,7 +220,7 @@ Creating New Variables: As needed for the analysis, create new variables (e.g., 
 Dropping Irrelevant Variables: Remove variables that are not relevant to my analysis to simplify the dataset.
 Merging Dataframes: Unnesting and Joining the hero attributes with match data based on hero_id.  
 
-**This new data frame includes the most essential variables. I might adjust it as I go further with my statistical analysis. **
+**This new data frame includes the most essential variables.**
 
 \begin{center}
 \LARGE
@@ -227,7 +230,7 @@ Merging Dataframes: Unnesting and Joining the hero attributes with match data ba
 
 # Plotting: Summarizing, Grouping and Plotting Data to Answer Key Questions.
 
-**Creating a multifaceted histogram that shows games played versus games won, separated by hero attribute, will help visualize how often I play and win with heroes of different primary attributes (Agility, Intelligence, Strength, all_universal.**
+**Creating a multifaceted histogram that shows games played versus games won, separated by hero attribute. This will help visualize how often I play and win with heroes of different primary attributes (Agility, Intelligence, Strength, all_universal.**
 
 ```{r}
 # Create a summary of games played and games won by hero attribute
@@ -353,14 +356,16 @@ hero_play_count <- new_data_frame %>%
 
 # Create the bar chart
 ggplot(hero_play_count, aes(x = reorder(name, n), y = n, fill = name)) +
-  geom_bar(stat = "identity", position = "dodge") +
+  geom_bar(stat = "identity", position = "dodge", fill = "skyblue") +
   labs(x = "Hero", y = "Number of Games Played",
        title = "Top 10 Most Played Heroes") +
-  scale_fill_brewer(palette = "Set1") +
+ 
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = "none") +
   guides(fill = FALSE)  # Hide the legend, as it's redundant in this case
 ```
+
+
 ```{r}
 # Calculate total wins and losses for each hero
 total_wins_losses <- new_data_frame %>%
@@ -381,7 +386,7 @@ ggplot(long_data_top_heroes, aes(x = name, y = Count, fill = Outcome)) +
   geom_bar(stat = "identity", position = "dodge") +
   labs(x = "Hero", y = "Number of Games (Win/Loss)",
        title = "Win/Loss Count for Top 10 Most Played Heroes") +
-  scale_fill_brewer(palette = "Set1") +
+  scale_fill_manual(values = c("TotalWins" = "skyblue", "TotalLosses" = "pink")) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = "top") +
   guides(fill = guide_legend(title = "Type"))
@@ -435,7 +440,7 @@ ggplot(long_side_wins_losses, aes(x = side, y = Count, fill = Outcome)) +
        x = "Side",
        y = "Count") +
   theme_minimal() +
-  scale_fill_manual(values = c("wins" = "green", "losses" = "red")) +
+  scale_fill_manual(values = c("wins" = "skyblue", "losses" = "pink")) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 Excellent, I will start playing more on the Radiant side! 
@@ -576,7 +581,11 @@ print(paste("Precision:", precision))
 print(paste("Recall (Sensitivity):", recall))
 print(paste("F1 Score:", F1_score))
 ```
-The logistic regression model exhibits robust performance on the test set, achieving an accuracy of approximately 85.71%, significantly outperforming the baseline no information rate of 51.02%. The model demonstrates a high sensitivity of 96%, indicating a strong ability to correctly identify true negatives, but shows a relatively lower specificity of 75%, pointing to a moderate capability in correctly predicting true positives. Precision, or the positive predictive value, stands at 80%, while the model maintains an impressive negative predictive value of 94.74%. The F1 score, which balances precision and recall, is quite high at 0.8727, suggesting a strong overall model performance. The substantial Kappa statistic indicates a significant agreement between predictions and actual outcomes, affirming the model's predictive validity.
+The logistic regression model used in this project proved to be a powerful tool in predicting match outcomes based on key performance metrics. The model achieved an accuracy of 85.71%, significantly outperforming the baseline no information rate of 51.02%. Key predictors such as kills, KDA (Kill-Death-Assist ratio), last hits, net worth, total gold, total XP, and XP per minute were identified as significant contributors to the likelihood of winning a match.
+
+The model's performance was validated against a test dataset, demonstrating high sensitivity (96%) and precision (80%), with an overall F1 score of 0.8727. These results indicate a strong capability of the model to predict match outcomes accurately.
+
+Moving forward, further refinement of the model and additional diagnostic checks are essential to ensure its robustness and generalizability. Additionally, exploring time series analysis and natural language processing for in-game communication data could provide deeper insights into performance trends and the impact of teamwork on match outcomes.
 
 \begin{center}
 \LARGE
@@ -585,11 +594,15 @@ The logistic regression model exhibits robust performance on the test set, achie
 
 # Conclusion
 
-In this analysis, I delved into understanding my gaming strategy and win probability in Dota 2, focusing on factors like the chosen heroes, their attack types, primary attributes, and team sides. I conducted a thorough visualization to explore the correlation between these variables and the ultimate goal of winning matches. Subsequently, I developed a predictive model based on key in-game metrics to estimate the likelihood of winning.
-However, some initial research questions remain unaddressed:
-A time series analysis would be apt regarding the evolution of my performance over time and identifying areas of improvement or decline. While specific dates for each match aren't available, I can approximate this by grouping matches using their ascending match_ids.
-As for the impact of communication and teamwork on securing wins, a more intricate approach is needed. This ideally involves analyzing in-game textual chat through natural language processing. Unfortunately, due to the absence of voice chat data, this analysis has its limitations.
-Furthermore, my created model requires additional diagnostic checks to confirm its accuracy and reliability. This step is crucial to ensure the model's robustness and capability to generalize beyond the current dataset.
+In this analysis, I delved into understanding my gaming strategy and win probability in Dota 2, focusing on factors like the chosen heroes, their attack types, primary attributes, and team sides. Through thorough data collection, cleaning, and preprocessing, I built a comprehensive dataset representing my gameplay history. This dataset facilitated an extensive exploratory data analysis (EDA), which helped in identifying key variables influencing match outcomes.
+
+Subsequently, I developed a predictive model using logistic regression, which demonstrated strong performance in predicting match outcomes based on key in-game metrics. The model's accuracy, sensitivity, precision, and F1 score were all notably high, indicating its effectiveness in identifying the factors that contribute to winning a match.
+
+Despite the success of the model, some initial research questions remain unaddressed. For instance, a time series analysis could provide insights into the evolution of my performance over time, highlighting areas of improvement or decline. Although specific dates for each match are unavailable, this analysis could be approximated by grouping matches using their ascending match IDs.
+
+Furthermore, analyzing the impact of communication and teamwork on securing wins requires a more intricate approach, ideally involving natural language processing (NLP) of in-game chat data. Unfortunately, due to the absence of voice chat data, this analysis has limitations.
+
+The logistic regression model, while robust, requires additional diagnostic checks to confirm its accuracy and reliability. This step is crucial to ensure the model's generalizability beyond the current dataset.
 
 
 
