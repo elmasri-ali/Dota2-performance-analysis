@@ -19,10 +19,10 @@ This repository contains a comprehensive analysis of Dota 2 gameplay performance
 3. Navigate to either `r_analysis` or `python_analysis` to run the respective analyses.
 
 ### R Analysis
-See the detailed [R Analysis README](r_analysis/README.md) for instructions on running the R scripts and understanding the results.
+See the detailed [R Analysis README](r-analysis/README.md) for instructions on running the R scripts and understanding the results.
 
 ### Python Analysis
-See the detailed [Python Analysis README](python_analysis/README.md) for instructions on running the Python scripts and understanding the results.
+See the detailed [Python Analysis README](python-analysis/README.md) for instructions on running the Python scripts and understanding the results.
 
 ## Key Findings
 - Analysis of hero selection and its impact on match outcomes.
